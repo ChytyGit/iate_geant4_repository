@@ -39,11 +39,13 @@
 *.app
 
 # Build directories
+.vs/
 build/
 Build/
 build-*/
 
 # CMake generated files
+out/
 CMakeFiles/
 CMakeCache.txt
 cmake_install.cmake
