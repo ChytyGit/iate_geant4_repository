@@ -4,27 +4,42 @@
 #include <G4UIExecutive.hh>
 #include <DetectorConstruction.hh>
 #include <G4VisManager.hh>
+#include <PrimaryGenerator.hh>
 #include <QBBC.hh>
 
 
 int main(int argc, char** argv)
 {
-	G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+	G4UIExecutive* ui = 0;
+	if (argc == 1) // если запуск по умлочанию (интерактивный режим с 0 аргументов)
+	{
+		ui = new G4UIExecutive(argc, argv);
+	}
 
 	auto runManager = new G4RunManager();
-	auto visManager = new G4VisExecutive();
 
 	runManager->SetUserInitialization(new DetectorConstruction()); // подключаем нашу геометрию
-	runManager->SetUserInitialization(new QBBC());
+	runManager->SetUserInitialization(new QBBC()); // создаём референсный физический лист
+	runManager->SetUserAction(new PrimaryGenerator());
 
+	auto visManager = new G4VisExecutive();
 	visManager->Initialize();
-	runManager->Initialize(); // запускаем саму симуляцию (правильнее: ядро, которое за всё отвечает)
 
 	G4UImanager* UImanager = G4UImanager::GetUIpointer();
-	UImanager->ApplyCommand("/vis/open OGL 600x600");
-	UImanager->ApplyCommand("/vis/drawVolume");
+	//runManager->Initialize(); // запускаем саму симуляцию (правильнее: ядро, которое за всё отвечает [отнесено в макрос])
 
-	ui->SessionStart();
+	if(!ui)
+	{
+		G4String command = "/control/execute ";
+		G4String fileName = argv[1]; // читает название .mac файла
+		UImanager->ApplyCommand(command + fileName);
+	}
+	else
+	{
+		UImanager->ApplyCommand("/control/execute vis.mac"); // сразу запускает vis.mac
+		ui->SessionStart();
+		delete ui;
+	}
 
 	delete runManager; // завершаем работу
 	return 0;

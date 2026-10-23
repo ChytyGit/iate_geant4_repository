@@ -1,0 +1,23 @@
+# Инициализация ядра
+/run/initialize 
+
+# Выбор движка
+/vis/open OGL 600x600
+
+# Отрисовка геометрии
+/vis/drawVolume
+
+# Автообновление при изменениях
+/vis/viewer/set/autoRefresh true
+
+# Накопление треков (без этого каждый след. удаляет пред.)
+/vis/scene/endOfEventAction accumulate
+
+# Добавление плавных треков (есть и другие виды)
+/vis/scene/add/trajectories smooth
+
+# Добавление координат
+/vis/scene/add/axes
+
+# Добавление номера запуска
+/vis/scene/add/eventID

@@ -6,7 +6,7 @@ DetectorConstruction::~DetectorConstruction() {}
 G4VPhysicalVolume*  DetectorConstruction::Construct()
 {
 	G4NistManager* nistManager = G4NistManager::Instance(); // про материпы позже
-	G4Material* worldMat = nistManager->FindOrBuildMaterial("G4_Galactic");
+	G4Material* worldMat = nistManager->FindOrBuildMaterial("G4_AIR");
 
 	G4double worldLength = 0.5 * m; // для каждой геометрии лучше отдельно указывать все размеры
 									// такой способ позволяет держать структуру и быстро изменять в случае надобности
@@ -19,8 +19,8 @@ G4VPhysicalVolume*  DetectorConstruction::Construct()
 	G4VPhysicalVolume* worldPhysical = new G4PVPlacement(0, G4ThreeVector(0., 0., 0.), "worldPhysical", worldLogical, 0, false, 0); // Создаём PhysicalVolume
 
 	G4VisAttributes* worldAtt = new G4VisAttributes();
-	worldAtt->SetVisibility(false); // Делаем мировой куб невидимым, если нужна видимость, то меняем на true
-	worldLogical->SetVisAttributes(worldAtt);
+	//worldAtt->SetVisibility(false); // Делаем мировой куб невидимым; если нужна видимость, то меняем на true
+	//worldLogical->SetVisAttributes(worldAtt);
 
 
 	// =======Объединение объёмов=======
@@ -33,7 +33,7 @@ G4VPhysicalVolume*  DetectorConstruction::Construct()
 	//G4VPhysicalVolume* unionPhysical = new G4PVPlacement(0, G4ThreeVector(0., 0., 0.), unionLogical, "unionPhysical", worldLogical, false, 0, false);
 	// =================================
 	
-	// =======Вычитание объёмов=======
+	// ========Вычитание объёмов========
 	//G4Box* box = new G4Box("Box", 4 * cm, 4 * cm, 4 * cm);
 	//G4LogicalVolume* boxLogical = new G4LogicalVolume(box, worldMat, "boxLogical");
 	//G4Tubs* cylinder = new G4Tubs("Cylinder", 0. * cm, 5. * cm, 5. * cm, 0., 2 * CLHEP::pi);
@@ -41,15 +41,25 @@ G4VPhysicalVolume*  DetectorConstruction::Construct()
 	//																																// соответственно, вычитаем из box
 	//G4LogicalVolume* substractionLogical = new G4LogicalVolume(substractionSolid, worldMat, "unionLogical");
 	//G4VPhysicalVolume* substractionPhysical = new G4PVPlacement(0, G4ThreeVector(0., 0., 0.), substractionLogical, "unionPhysical", worldLogical, false, 0, false);
-	// ===============================
+	// =================================
 
 	// =======Пересечение объёмов=======
-	G4Box* box = new G4Box("Box", 4 * cm, 4 * cm, 4 * cm);
-	G4LogicalVolume* boxLogical = new G4LogicalVolume(box, worldMat, "boxLogical");
-	G4Tubs* cylinder = new G4Tubs("Cylinder", 0. * cm, 5. * cm, 5. * cm, 0., 2 * CLHEP::pi);
-	G4IntersectionSolid* intersectionSolid = new G4IntersectionSolid("unionSolid", box, cylinder, 0, G4ThreeVector(0., 0., 2. * cm)); // объединяем два объёма
-	G4LogicalVolume* intersectionLogical = new G4LogicalVolume(intersectionSolid, worldMat, "unionLogical");
-	G4VPhysicalVolume* intersectionPhysical = new G4PVPlacement(0, G4ThreeVector(0., 0., 0.), intersectionLogical, "unionPhysical", worldLogical, false, 0, false);
+	//G4Box* box = new G4Box("Box", 4 * cm, 4 * cm, 4 * cm);
+	//G4LogicalVolume* boxLogical = new G4LogicalVolume(box, worldMat, "boxLogical");
+	//G4Tubs* cylinder = new G4Tubs("Cylinder", 0. * cm, 5. * cm, 5. * cm, 0., 2 * CLHEP::pi);
+	//G4IntersectionSolid* intersectionSolid = new G4IntersectionSolid("unionSolid", box, cylinder, 0, G4ThreeVector(0., 0., 2. * cm)); // объединяем два объёма
+	//G4LogicalVolume* intersectionLogical = new G4LogicalVolume(intersectionSolid, worldMat, "unionLogical");
+	//G4VPhysicalVolume* intersectionPhysical = new G4PVPlacement(0, G4ThreeVector(0., 0., 0.), intersectionLogical, "unionPhysical", worldLogical, false, 0, false);
 	// =================================
+
+	// =======Копирование объёмов=======
+	//G4Box* box = new G4Box("Box", 4 * cm, 4 * cm, 4 * cm);
+	//G4LogicalVolume* boxLogical = new G4LogicalVolume(box, worldMat, "boxLogical");
+	//for (int i = 0; i < 4; i++)
+	//{
+	//	G4VPhysicalVolume* boxPhysical = new G4PVPlacement(0, G4ThreeVector(0, 0, i * 10 * cm), boxLogical, "boxPhysical", worldLogical, true, i);
+	//}
+	// =================================
+
 	return worldPhysical;
 }

@@ -21,7 +21,7 @@ public:
 	DetectorConstruction();
 	~DetectorConstruction();
 
-	G4VPhysicalVolume* Construct() override; // главный метод, который вызывает runManager
+	G4VPhysicalVolume* Construct() override; // главный метод создания геометрии, именно его вызывает runManager
 
 private:
 };
