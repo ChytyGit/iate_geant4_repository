@@ -3,6 +3,7 @@
 #include <G4VUserPrimaryGeneratorAction.hh>
 #include <G4ParticleGun.hh>
 #include <G4Electron.hh> // частица-электрон
+#include <G4RandomTools.hh>
 
 class PrimaryGenerator : public G4VUserPrimaryGeneratorAction
 {
